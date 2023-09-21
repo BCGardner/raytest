@@ -15,10 +15,10 @@ def main(config):
         metric='mean_accuracy', mode='max', num_samples=4
     )
     checkpoint_config = air.CheckpointConfig(
-        checkpoint_frequency=40
+        checkpoint_frequency=20
     )
     run_config = air.RunConfig(
-        stop={'training_iteration': 400},
+        stop={'training_iteration': 200},
         checkpoint_config=checkpoint_config
     )
     # Run Tuner

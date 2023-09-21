@@ -27,18 +27,20 @@ available_node_types:
          # make a new AWS instance on the AWS Console
          ImageId: ami-0eb260c4d5475b901
          # Define disk space of instance
-        #  BlockDeviceMappings:
-        #     - DeviceName: /dev/sda1
-        #       Ebs:
-        #           VolumeSize: 150
+         BlockDeviceMappings:
+            - DeviceName: /dev/sda1
+              Ebs:
+                  VolumeSize: 140
+                  VolumeType: gp3
    worker_nodes:
       node_config:
          InstanceType: t2.xlarge
          ImageId: ami-0eb260c4d5475b901
-        #  BlockDeviceMappings:
-        #     - DeviceName: /dev/sda1
-        #       Ebs:
-        #           VolumeSize: 150
+         BlockDeviceMappings:
+            - DeviceName: /dev/sda1
+              Ebs:
+                  VolumeSize: 140
+                  VolumeType: gp3
 
 # Define the name of the head node from above here.
 head_node_type: head_node
@@ -53,6 +55,7 @@ auth:
    # ssh_private_key: /path/to/your/key.pem
 
 file_mounts: {
+   "/tmp/current_branch_sha": "/home/brian/Documents/git-repos/ray_test/.git/refs/heads/master",
   #  "/path1/on/remote/machine": "/path1/on/local/machine",
 #    "/path2/on/remote/machine": "/path2/on/local/machine",
 }
@@ -60,13 +63,13 @@ file_mounts: {
 # These commands are run every time any new node is created.
 setup_commands:
    # Two first lines are a workaround for ssh timing out
-  #  - sleep 4
-   - sudo apt update
-   - sudo DEBIAN_FRONTEND=noninteractive apt install -y python3-pip python-is-python3
-   - pip install ray[default,tune]==2.6.3 boto3 torch torchvision
-
-# # These commands are run every time any new node is created.
-# setup_commands:
-#    # Two first lines are a workaround for ssh timing out
-#    - conda activate ray-test | conda create -n ray-test python=3.11
-#    - conda activate ray-test && pip install -U ray[default,tune]==2.6.3 boto3 torch
+   # Install conda
+   - which conda || mkdir -p ~/miniconda3 && wget https://repo.anaconda.com/miniconda/Miniconda3-py311_23.5.2-0-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+   - which conda || bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3 && rm -rf ~/miniconda3/miniconda.sh
+   - ~/miniconda3/bin/conda init bash
+   # - sudo apt update
+   # - sudo DEBIAN_FRONTEND=noninteractive apt install -y python3-pip python-is-python3
+   # Install packages
+   - test -e raytest || git clone https://github.com/BCGardner/raytest.git
+   - cd raytest && pip install -r requirements.txt && pip install -e .
+   - cd raytest && git fetch && git checkout `cat /tmp/current_branch_sha`
