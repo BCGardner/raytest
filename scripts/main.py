@@ -18,6 +18,7 @@ def main(config):
         checkpoint_frequency=20
     )
     run_config = air.RunConfig(
+        storage_path='s3://spikeybucket/ray_results/',
         stop={'training_iteration': 200},
         checkpoint_config=checkpoint_config
     )

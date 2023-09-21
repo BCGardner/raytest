@@ -72,4 +72,5 @@ setup_commands:
    # Install packages
    - test -e raytest || git clone https://github.com/BCGardner/raytest.git
    - cd raytest && pip install -r requirements.txt && pip install -e .
+   - pip torch torchvision --index-url https://download.pytorch.org/whl/cpu
    - cd raytest && git fetch && git checkout `cat /tmp/current_branch_sha`

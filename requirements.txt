@@ -1,6 +1,6 @@
 ray[default,tune]==2.6.3
-torch
-torchvision
+# torch
+# torchvision
 boto3
 numpy
 matplotlib
