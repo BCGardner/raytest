@@ -1,0 +1,8 @@
+ray[default,tune]==2.6.3
+torch
+torchvision
+boto3
+numpy
+matplotlib
+pandas
+tensorboard
